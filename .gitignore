@@ -13,3 +13,4 @@ t2cp-test-*
 *.o
 *.obj
 *.lst
+*.*.bak
