@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"J.C. Draffin"
+	],
+	"copyright": "Copyright © 2022, J.C. Draffin",
+	"description": "Run functions inside the middle of paragraphs and sentences to dynamically change what text is displayed to user",
+	"license": "GPT-2",
+	"name": "t2cp"
+}

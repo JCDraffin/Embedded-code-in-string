@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/t2cp
+t2cp.so
+t2cp.dylib
+t2cp.dll
+t2cp.a
+t2cp.lib
+t2cp-test-*
+*.exe
+*.o
+*.obj
+*.lst
