@@ -5,13 +5,13 @@ abstract class Node
 {
     protected int nodeIndex;
     protected Token identifier;
-    public Node[] parmeters = [];
+    public Node[] parameters = [];
     abstract public int parse(Node parent, Token[] list);
     public void registerNode(Node applicant)
     {
         if (applicant is null)
             return; // would this ever be true?
-        parmeters ~= applicant;
+        parameters ~= applicant;
     }
 
     
@@ -85,7 +85,7 @@ class RootNode : Node
         string[] arr =[];
 
         ////TODO: Do i really need 2 loops?
-        foreach (key; parmeters)
+        foreach (key; parameters)
         {
             arr ~= key.evaluate(AE);
         }
@@ -144,7 +144,7 @@ class SimpleNode : Node
 class FunctionNode : Node
 {
 
-    private Node[] parameterlist;
+    private Node[] parameterList;
 
     enum
     {
@@ -200,7 +200,7 @@ class FunctionNode : Node
     {
         string text = "";
         string[] arr =[];
-        foreach (key; parmeters)
+        foreach (key; parameters)
         {
             arr ~= key.evaluate(AE);
         }

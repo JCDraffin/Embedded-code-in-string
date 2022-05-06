@@ -26,7 +26,7 @@ module parser.functionlist;
 private const ubyte members2Ignore = 5;
 
 /++ 
- + Use to initalize the singleton 
+ + Use to initialize the singleton 
  + Returns: AA of all parser functions.
  +/
 private string function(string[])[string] init_instance()
@@ -49,7 +49,7 @@ private string function(string[])[string] _instances;
 /++ 
  + Returns: a whitelist of delegates the parser is allowed to use. 
  +/
-public string function(string[])[string] instnace()
+public string function(string[])[string] instance()
 {
     if (_instances is null)
         _instances = init_instance;
@@ -210,7 +210,7 @@ string funclist(string[] value)
 {
     import std.format;
 
-    auto list = instnace();
+    auto list = instance();
     return format("%s", list);
 
 }

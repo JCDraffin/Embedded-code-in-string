@@ -14,7 +14,7 @@ enum TokenType
     ELSE = 8,
 }
 
-///Token is a convient storage type for moving around essiential text and token identifer for future logic. 
+///Token is a convenient storage type for moving around essential text and token identifier for future logic. 
 struct Token
 {
     import std.conv;
@@ -76,8 +76,8 @@ abstract class AbstractScanState
 
         bool isValidName = true;
 
-        // ulong tempIndex = lexorIndex +1;
-        ulong tempIndex = data.scanNextWord(data.lexorIndex + 1);
+        // ulong tempIndex = lexerIndex +1;
+        ulong tempIndex = data.scanNextWord(data.lexerIndex + 1);
         if (tempIndex == ulong.max)
             return;
         ///
@@ -102,7 +102,7 @@ abstract class AbstractScanState
         }
 
         tempIndex--;
-        data.lexorIndex = tempIndex;
+        data.lexerIndex = tempIndex;
 
         data.tokens ~= Token(ttype, data.buffer);
         ignToken();
@@ -123,26 +123,26 @@ class TextScanState : AbstractScanState
     override Token[] scanChar()
     {
 
-        //Helper delegates to make conplexIdentifiers cleaner.
+        //Helper delegates to make complexIdentifiers cleaner.
         //auto makeVar = () => make(addVar => (addToken(TokenType.VAR_, "DELETEME")));
         //auto makeFlag = () => make(addFlag => (addToken(TokenType.FLAG, "DELETEME")));
         //auto makeFunc = () => make(addFunc => (addToken(TokenType.FUNC, "DELETEME")));
         switch (data.focusChar)
         {
         case '@':
-            if (data.checkPeak(data.lexorIndex + 1, '@'))
+            if (data.checkPeak(data.lexerIndex + 1, '@'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
-            else if (data.checkPeak(data.lexorIndex + 1, '#'))
+            else if (data.checkPeak(data.lexerIndex + 1, '#'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
-            else if (data.checkPeak(data.lexorIndex + 1, '$'))
+            else if (data.checkPeak(data.lexerIndex + 1, '$'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
             else
@@ -152,15 +152,15 @@ class TextScanState : AbstractScanState
                 data.buffer ~= data.focusChar;
                 ignToken();
                 make(TokenType.FUNC);
-                // lexorState = CODE_SINGLE_STATE;
+                // lexerState = CODE_SINGLE_STATE;
                 parentStateMachine.switchState(false);
             }
             break;
         case '#':
 
-            if (data.checkPeak(data.lexorIndex + 1, '#'))
+            if (data.checkPeak(data.lexerIndex + 1, '#'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
             else
@@ -172,9 +172,9 @@ class TextScanState : AbstractScanState
             break;
         case '$':
 
-            if (data.checkPeak(data.lexorIndex + 1, '$'))
+            if (data.checkPeak(data.lexerIndex + 1, '$'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
             else
@@ -233,7 +233,7 @@ class CodeScanState : AbstractScanState
             }
             if (l == r)
             {
-                // lexorState = TEXT_STATE;
+                // lexerState = TEXT_STATE;
                 parentStateMachine.switchState(true);
 
             }
@@ -246,9 +246,9 @@ class CodeScanState : AbstractScanState
 
             break;
         case '#':
-            if (data.checkPeak(data.lexorIndex + 1, '#'))
+            if (data.checkPeak(data.lexerIndex + 1, '#'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
             else
@@ -260,9 +260,9 @@ class CodeScanState : AbstractScanState
 
             break;
         case '$':
-            if (data.checkPeak(data.lexorIndex + 1, '$'))
+            if (data.checkPeak(data.lexerIndex + 1, '$'))
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 data.buffer ~= data.focusChar;
             }
             else
@@ -273,11 +273,11 @@ class CodeScanState : AbstractScanState
 
             break;
         case '@':
-            if (data.checkPeak(data.lexorIndex + 1, '@') || data.checkPeak(data.lexorIndex + 1, '#') || data.checkPeak(
-                    data.lexorIndex + 1, '$'))
+            if (data.checkPeak(data.lexerIndex + 1, '@') || data.checkPeak(data.lexerIndex + 1, '#') || data.checkPeak(
+                    data.lexerIndex + 1, '$'))
             {
-                data.lexorIndex++; //move the index head directly to the right.
-                data.buffer ~= data.text[data.lexorIndex]; //We don't use focusChar because the character we care about is special character directly to it's right.  
+                data.lexerIndex++; //move the index head directly to the right.
+                data.buffer ~= data.text[data.lexerIndex]; //We don't use focusChar because the character we care about is special character directly to it's right.  
             }
             else
             {
@@ -291,11 +291,11 @@ class CodeScanState : AbstractScanState
 
             if (data.focusChar != ' ')
                 data.buffer ~= data.focusChar;
-            char charbuf = data.peakAhead(data.lexorIndex + 1);
+            char charbuf = data.peakAhead(data.lexerIndex + 1);
 
             if (charbuf == ' ' || charbuf == '\t' || charbuf == '\n' || charbuf == '\r')
             {
-                data.lexorIndex++;
+                data.lexerIndex++;
                 addToken(TokenType.PARAM);
                 //if (tokens.length > 0 && tokens[$].tType == TokenType.PARAM ||tokens[$].tType == TokenType.R_PERN )    addToken(TokenType.PARAM);   
             }
@@ -371,8 +371,8 @@ private class Data
 {
     ///In use cases where we have to return a primitive char value, but there is no value to return.
     const NEG_ACK = cast(char) 21;
-    byte lexorState = 0;
-    ulong lexorIndex = 0;
+    byte lexerState = 0;
+    ulong lexerIndex = 0;
     char[] buffer = [];
 
     string text;
@@ -384,29 +384,29 @@ private class Data
         this.text = text;
         buffer = [];
 
-        lexorState = 0;
-        lexorIndex = 0;
+        lexerState = 0;
+        lexerIndex = 0;
     }
 
     public char focusChar()
     {
-        return focusChar(lexorIndex);
+        return focusChar(lexerIndex);
     }
 
     public char focusChar(ulong index)
     {
-        return lexorIndex < text.length ? text[index] : text[$ - 1];
+        return lexerIndex < text.length ? text[index] : text[$ - 1];
     }
 
     public bool checkPeak(char testsubject)
     {
-        return checkPeak(lexorIndex + 1, testsubject);
+        return checkPeak(lexerIndex + 1, testsubject);
     }
 
-    public bool checkPeak(ulong index, char testsubject)
+    public bool checkPeak(ulong index, char testSubject)
     {
 
-        return hasPeak(index) && testsubject == peakAhead(index);
+        return hasPeak(index) && testSubject == peakAhead(index);
     }
 
     public bool hasPeak(ulong index)
@@ -445,11 +445,11 @@ private class Data
 
     public char peakAhead()
     {
-        return peakAhead(lexorIndex + 1);
+        return peakAhead(lexerIndex + 1);
     }
 }
 
-public Token[] lexor(string text)
+public Token[] lexer(string text)
 {
 
     auto data = new Data(text);
@@ -471,8 +471,8 @@ public Token[] lexor(string text)
     {
         bool isValidName = true;
 
-        // ulong tempIndex = lexorIndex +1;
-        ulong tempIndex = data.scanNextWord(data.lexorIndex + 1);
+        // ulong tempIndex = lexerIndex +1;
+        ulong tempIndex = data.scanNextWord(data.lexerIndex + 1);
         if (tempIndex == ulong.max)
             return;
         ///
@@ -497,7 +497,7 @@ public Token[] lexor(string text)
         }
 
         tempIndex--;
-        data.lexorIndex = tempIndex;
+        data.lexerIndex = tempIndex;
 
         addSpecialToken();
     }
@@ -511,8 +511,8 @@ public Token[] lexor(string text)
         data.buffer = [];
     }
 
-    string bufferdebug;
-    for (; data.lexorIndex < data.text.length; data.lexorIndex++)
+    string bufferDebug;
+    for (; data.lexerIndex < data.text.length; data.lexerIndex++)
     {
 
         ulong size = data.tokens.length;
@@ -523,13 +523,13 @@ public Token[] lexor(string text)
 
         // this is a HACK!
 
-        // if (lexorState == TEXT_STATE)
+        // if (lexerState == TEXT_STATE)
         //     textLex.lex(focusChar);
 
-        // else if (lexorState == CODE_SINGLE_STATE)
+        // else if (lexerState == CODE_SINGLE_STATE)
         //     codeLex.lex(focusChar);
 
-        // else if (lexorState == TEXT_STATE) switch (focusChar)
+        // else if (lexerState == TEXT_STATE) switch (focusChar)
         // {
         // default:
         //     assert(0);
@@ -543,7 +543,7 @@ public Token[] lexor(string text)
     const CODE_SINGLE_STATE = 1;
     const CODE_BLOCK_STATE = 2;
 
-    switch (data.lexorState)
+    switch (data.lexerState)
     {
     case TEXT_STATE:
         addText();
@@ -613,7 +613,7 @@ static void cookieCutterUnittest(string title, string input, string[] stringSamp
     }
 
     writefln!"\n{%s}"(title);
-    Token[] ta = lexor(input);
+    Token[] ta = lexer(input);
 
     writeln("Compare both sample array's length: ", tokenSample.length, " ", stringSample.length, " Expected length is : ", tokenLength);
     assert(tokenSample.length == stringSample.length && isRightLength(stringSample.length));

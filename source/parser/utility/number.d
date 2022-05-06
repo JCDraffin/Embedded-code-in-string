@@ -9,14 +9,14 @@ public static double[] getNumber(string[] samples, bool debugFlag = false)
 {
     string[] buffer = []; //string in the correct format to convert
 
-    const MAXIMUM_DECIMINAL_DELIMITER = 1;
+    const MAXIMUM_DECIMAL_DELIMITER = 1;
     bool isNumber = false;
     foreach (sample; samples)
     {
         import std.string;
 
         sample = sample.strip(); //removes white spaces from the left and right ends.
-        isNumber = sample.count('.') <= MAXIMUM_DECIMINAL_DELIMITER; //checks if the possible number has 0, or 1 deciminal.
+        isNumber = sample.count('.') <= MAXIMUM_DECIMAL_DELIMITER; //checks if the possible number has 0, or 1 decimal.
         foreach (symbol; sample)
         {
             if (!isNumber)
@@ -48,7 +48,7 @@ unittest  //hasNumber fail
     assert(!hasNumber(["This "])); //false: No integer exist
     assert(!hasNumber(["This ", " Will ", " Fail", "!"])); //false: No integer exist
     assert(!hasNumber(["This2 ", " Wi3ll ", " Fa4il", "!5"])); //false: integer follows a symbol thus not a valid number.
-    assert(!hasNumber(["3This ", "4 Will ", " fFail", "23232!"])); //false: integer preceeds a symbol, thus not a valid number.
+    assert(!hasNumber(["3This ", "4 Will ", " fFail", "23232!"])); //false: integer precedes a symbol, thus not a valid number.
     assert(!hasNumber(["1,000"])); //false BUT SHOULD IT? delimiters not supported
 
     assert(hasNumber(["This ", " Will ", "not", " Fail", "1"])); //true: at least one number is just a number
@@ -57,7 +57,7 @@ unittest  //hasNumber fail
     assert(hasNumber(["3.14 "])); //true decimal numbers are valid numbers.
     assert(hasNumber(["3.443 ", " 35.353", "5.353535"])); //true decimal numbers are valid numbers.
 
-    assert(hasNumber(["   1234567890"])); //true: white space infront of number is ignored/stripped, thus valid
+    assert(hasNumber(["   1234567890"])); //true: white space in front of number is ignored/stripped, thus valid
     assert(hasNumber(["1234567890    "])); //true: white space behind number is ignored/stripped, thus valid
     assert(hasNumber(["   1234567890      "])); //true: whitespace in front and behind number is ignore/stripped, thus valid
     assert(!hasNumber(["   12345   67890      "])); //false: white space between two numbers is not valid.
@@ -74,7 +74,7 @@ unittest  //hasNumber fail
     assert(!hasNumber(["This "])); //false: No integer exist
     assert(!hasNumber(["This ", " Will ", " Fail", "!"])); //false: No integer exist
     assert(!hasNumber(["This2 ", " Wi3ll ", " Fa4il", "!5"])); //false: integer follows a symbol thus not a valid number.
-    assert(!hasNumber(["3This ", "4 Will ", " fFail", "23232!"])); //false: integer preceeds a symbol, thus not a valid number.
+    assert(!hasNumber(["3This ", "4 Will ", " fFail", "23232!"])); //false: integer proceeds a symbol, thus not a valid number.
     assert(!hasNumber(["1,000"])); //false BUT SHOULD IT? delimiters not supported
 
     assert(hasNumber(["This ", " Will ", "not", " Fail", "1"])); //true: at least one number is just a number
@@ -83,7 +83,7 @@ unittest  //hasNumber fail
     assert(hasNumber(["3.14 "])); //true decimal numbers are valid numbers.
     assert(hasNumber(["3.443 ", " 35.353", "5.353535"])); //true decimal numbers are valid numbers.
 
-    assert(hasNumber(["   1234567890"])); //true: white space infront of number is ignored/stripped, thus valid
+    assert(hasNumber(["   1234567890"])); //true: white space in front of number is ignored/stripped, thus valid
     assert(hasNumber(["1234567890    "])); //true: white space behind number is ignored/stripped, thus valid
     assert(hasNumber(["   1234567890      "])); //true: whitespace in front and behind number is ignore/stripped, thus valid
     assert(!hasNumber(["   12345   67890      "])); //false: white space between two numbers is not valid.

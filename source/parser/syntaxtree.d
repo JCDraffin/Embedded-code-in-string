@@ -102,10 +102,10 @@ unittest
 static void cookieCutterUnittest(string title, string input, string result = "")
 {
     import std.stdio : writeln, writefln;
-    import parser.tokenizer: lexor;
+    import parser.tokenizer: lexer;
     import parser.node;
     writefln!"\n{%s:%s}"(type,title);
-    Token[] ta = lexor(input);
+    Token[] ta = lexer(input);
 
     foreach (i, Token key; ta)
     {
@@ -114,9 +114,9 @@ static void cookieCutterUnittest(string title, string input, string result = "")
     RootNode root = new RootNode();
     int hasError = root.parse(null, ta);
 
-    writefln!"%s \t Ran? %d\tlength: %d"(root,hasError,root.parmeters.length);
-    if(root.parmeters.length > 2)
-    writefln!"%s \t length: %d"(root.parmeters[1],root.parmeters[1].parmeters.length);
+    writefln!"%s \t Ran? %d\tlength: %d"(root,hasError,root.parameters.length);
+    if(root.parameters.length > 2)
+    writefln!"%s \t length: %d"(root.parameters[1],root.parameters[1].parameters.length);
     
     if(result != "")
     {

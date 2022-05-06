@@ -5,7 +5,7 @@ public abstract class AbstractEvaluator
     abstract protected string errorMsg(string errorText);
     abstract protected string errorMsgFuncDoesNotExist(string funcIdentifer); // 
     abstract public string runCompiledFunction(string funcIdentifer, string[] arguments); //Function to send scripting language calls, into compiled language calls.
-    abstract public string runCopmiledDlangFunction(string funcIdentifer, string[] arguments); //Should this function even exist! 
+    abstract public string runCompiledDlangFunction(string funcIdentifer, string[] arguments); //Should this function even exist! 
 
 }
 
@@ -26,15 +26,15 @@ public class BasicEvaluator : AbstractEvaluator
 
     public override string runCompiledFunction(string funcIdentifer, string[] arguments)
     {
-        return runCopmiledDlangFunction(funcIdentifer, arguments);
+        return runCompiledDlangFunction(funcIdentifer, arguments);
     }
 
-    public override string runCopmiledDlangFunction(string funcIdentifer, string[] arguments)
+    public override string runCompiledDlangFunction(string funcIdentifer, string[] arguments)
     {
         import parser.functionlist;
         import std.stdio;
 
-        auto list = instnace();
+        auto list = instance();
         auto func = (funcIdentifer in list);
         if(func is null) return errorMsgFuncDoesNotExist(funcIdentifer);
         return list[funcIdentifer](arguments);
@@ -49,6 +49,6 @@ unittest
     writeln("==========================");
     BasicEvaluator BE = new BasicEvaluator();
 
-    BE.runCopmiledDlangFunction("min", ["3", "2"]);
-    writeln(BE.runCopmiledDlangFunction("min", ["3", "2"]));
+    BE.runCompiledDlangFunction("min", ["3", "2"]);
+    writeln(BE.runCompiledDlangFunction("min", ["3", "2"]));
 }

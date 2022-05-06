@@ -10,11 +10,11 @@ void main()
 		"Hello, my name is @getUsername ( 0 ) . This text is here so you can have test text to run the application with.",
 		"@@ is our escape character like \\ is in C based languages. Functions/Delegates are called like so @@foo().",
 		"but if you need to add [@@] to your text without calling a Delegate like i did, add two @@ like so [@@@@]. Programmer@@Example.com",
-		"I wrote this application to help add functionality to strings without concatating strings with functions values.",
-		"Delegate calls have their pramaters converted into an array of strings, which are passed into a function from compiled code space.",
+		"I wrote this application to help add functionality to strings without concatenating strings with functions values.",
+		"Delegate calls have their parameters converted into an array of strings, which are passed into a function from compiled code space.",
 		"These delegates are scraped from the functions in functionlist.d file, and always take the form of [string foo(string[] value);] format. Here is the list of functions currently supported @funclist().",
 		"",
-		"The parser has no ability to parse mathimatical expression, opting to pass numerical values to deletages, like so @@add(1 2 3 4 5) which gives the result: @add(1 2 3 4 5).",
+		"The parser has no ability to parse mathematical expression, opting to pass numerical values to delegates, like so @@add(1 2 3 4 5) which gives the result: @add(1 2 3 4 5).",
 		"",
 		""
  );
@@ -25,7 +25,7 @@ void main()
 	// 	"Hello, my name is @getUsername ( 0 ).",
 	// );
 	import parser.tokenizer;
-	Token[] tokens = lexor(input);
+	Token[] tokens = lexer(input);
 	// 	writeln();
 	// 	writeln();
 	// 	writeln();
@@ -44,7 +44,7 @@ void main()
 	
 	import parser.node;
 	RootNode treenode = new RootNode();
-	treenode.parse(tokens);//this initalizes the node. 
+	treenode.parse(tokens);//this initializes the node. 
 
 	string output = treenode.evaluate(evaluator);
 
