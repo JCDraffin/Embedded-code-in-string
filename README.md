@@ -1,7 +1,7 @@
 This application(library?) is able to take strings, and find function calls. It's a non-Turing-complete parsed language.
 The goal of this project is to provide a solution in cases where printed text is slightly changed based on a conditional.
 i.e.
-``` 
+```d
 void example(ubyte timeInHours)
 {
   if(timeInHours < 12)
@@ -15,7 +15,8 @@ Theoretically, we can reduce that to 1 string which allows us to simplify the co
 
 =====
 Compile:
-```git clone git@github.com:JCDraffin/Embedded-code-in-string.git
+```bash
+git clone git@github.com:JCDraffin/Embedded-code-in-string.git
 cd Embedded-code-in-string
 dub build
 ``` 
