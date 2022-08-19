@@ -108,71 +108,65 @@ string max(string[] value)
 string add(string[] value)
 {
     import parser.utility.number;
-    import std.format;
+    import std.conv;
+    import std.algorithm.iteration;
 
     if (!hasNumber(value))
         return "0";
     double[] numbers = getNumber(value);
     double buffer = 0;
-    foreach (double key; numbers)
-    {
-        buffer += key;
-    }
-    
-    return format("%f", buffer);
+
+    buffer = numbers.fold!((a, b) => a + b);
+
+    return to!string(buffer);
 
 }
 
 string sub(string[] value)
 {
+
     import parser.utility.number;
-    import std.format;
+    import std.conv;
+    import std.algorithm.iteration;
 
     if (!hasNumber(value))
         return "0";
-    double[] numbers = getNumber(value);
+    double[] numbers = (0 ~ getNumber(value)); //We have to add 0 to the front, so the values are subtracted correctly.
     double buffer;
-    foreach (double key; numbers)
-    {
-        buffer -= key;
-    }
+    buffer = numbers.fold!((a, b) => a - b);
 
-    return format("%f", buffer);
+    return to!string(buffer);
 
 }
 
 string div(string[] value)
 {
     import parser.utility.number;
-    import std.format;
+    import std.conv;
+    import std.algorithm.iteration;
 
     if (!hasNumber(value))
         return "0";
     double[] numbers = getNumber(value);
     double buffer;
-    foreach (double key; numbers)
-    {
-        buffer /= key;
-    }
+    buffer = numbers.fold!((a, b) => a / b);
 
-    return format("%f", buffer);
+    return to!string(buffer);
 }
 
 string mul(string[] value)
 {
     import parser.utility.number;
-    import std.format;
+    import std.conv;
+    import std.algorithm.iteration;
 
     if (!hasNumber(value))
         return "0";
     double[] numbers = getNumber(value);
     double buffer;
-    foreach (double key; numbers)
-    {
-        buffer *= key;
-    }
+    buffer = numbers.fold!((a, b) => a * b);
 
-    return format("%f", buffer);
+    return to!string(buffer);
 
 }
 
@@ -190,6 +184,7 @@ string concat(string[] value)
 string getUsername(string[] value)
 {
     import std.stdio;
+
     string[] lazyLookUpTable = ["J. Draffin"];
 
     import parser.utility.number;

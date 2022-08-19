@@ -2,7 +2,17 @@ module parser.utility.number;
 
 public static bool hasNumber(string[] samples, bool debugFlag = false)
 {
-    return getNumber(samples).length != 0; // checks if the sample string will produce at least 1 number. 
+    import std.conv;
+    import std.string;
+
+    foreach (sample; samples)
+    {
+        if (sample.isNumeric)
+            return true;
+    }
+    // return getNumber(samples).length != 0; // checks if the sample string will produce at least 1 number. 
+    return false; // checks if the sample string will produce at least 1 number. 
+
 }
 
 public static double[] getNumber(string[] samples, bool debugFlag = false)
@@ -30,14 +40,21 @@ public static double[] getNumber(string[] samples, bool debugFlag = false)
             buffer ~= sample; //we've prove it's a number so add it to the buffer list for conversion. 
     }
     double[] result;
-    result.length = buffer.length;
     import std.conv;
+    import std.algorithm;
+    import std.algorithm.comparison;
+    import std.string;
+    import std.array;
 
-    foreach (i, ref key; buffer)
+    auto sum = buffer.filter!(a => a.isNumeric).array;
+    result.length = sum.length;
+    import std.stdio;
+
+    foreach (i, ref key; sum)
     {
         result[i] = to!double(key);
     }
-    return result; 
+    return result;
 }
 
 unittest  //hasNumber fail
