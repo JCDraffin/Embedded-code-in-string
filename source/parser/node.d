@@ -1,11 +1,18 @@
 module parser.node;
 import parser.tokenizer;
-import parser.evaluator:AbstractEvaluator;
+import parser.evaluator : AbstractEvaluator;
+
+///base class for organization token logic into a tree like node struture.
+///This allows us to treat each functions call and arguments like a stack frame. 
 abstract class Node
 {
+    ///remembers how deep the node is, in the tree branch.
     protected int nodeIndex;
+    ///The token the node is generated from.
     protected Token identifier;
+    ///All the child nodes that need to be evaluated before this node.
     public Node[] parameters = [];
+
     abstract public int parse(Node parent, Token[] list);
     public void registerNode(Node applicant)
     {
@@ -14,12 +21,11 @@ abstract class Node
         parameters ~= applicant;
     }
 
-    
-
+    ///returns a character for a debug print out. 
     abstract protected char[] symbol_debug();
- 
-    abstract public  string evaluate(AbstractEvaluator AE);
-    
+
+    ///recursive method to evalulate all child
+    abstract public string evaluate(AbstractEvaluator AE);
 
 }
 
@@ -33,17 +39,17 @@ class RootNode : Node
     public override int parse(Node parent, Token[] list)
     {
 
-
-                import std.stdio;
-
         assert(list.length != 0);
         for (super.nodeIndex = 0; super.nodeIndex < list.length; nodeIndex++)
         {
             final switch (list[super.nodeIndex].tType)
             {
+            case TokenType.VAR_:
+                Node n = new VarNode();
+                super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
+                break;
             case TokenType.TEXT:
             case TokenType.FLAG:
-            case TokenType.VAR_:
             case TokenType.PARAM:
                 Node n = new SimpleNode();
                 super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
@@ -58,14 +64,13 @@ class RootNode : Node
             case TokenType.L_PERN:
             case TokenType.ELSE:
             case TokenType.IF_: // if any of these show up, throw an error. ELSE & IF should be supported later.
+                import std.stdio;
+
                 writeln("%%ERROR%%");
                 writeln(list);
                 writeln(list[super.nodeIndex]);
                 writeln(list[1]);
-
                 writeln("%%ERROR%%");
-
-                
                 assert(0);
                 //return 0;
             } // end switch
@@ -82,7 +87,7 @@ class RootNode : Node
     public override string evaluate(AbstractEvaluator AE)
     {
         string text = "";
-        string[] arr =[];
+        string[] arr = [];
 
         ////TODO: Do i really need 2 loops?
         foreach (key; parameters)
@@ -199,13 +204,13 @@ class FunctionNode : Node
     public override string evaluate(AbstractEvaluator AE)
     {
         string text = "";
-        string[] arr =[];
+        string[] arr = [];
         foreach (key; parameters)
         {
             arr ~= key.evaluate(AE);
         }
 
-        text = AE.runCompiledFunction(identifier.str ,arr);
+        text = AE.runCompiledFunction(identifier.str, arr);
         return text;
     }
 

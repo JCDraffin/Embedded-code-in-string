@@ -47,7 +47,10 @@ unittest
 {
 
     string title = "Stress";
-    string sample = "@TH1SNUMBER() Hello! This is just a longer bit of text to test the tokenizer. Today is @TimeNow() which is unimportant but i need to keep the text going. Your age is @max(@min(99 55) 18). One last stress @mock(@tess() kokokfoe fkokefoe @monkey(kfeoke @roger(fokokfe @baka() fkoeokfe))) damn";
+    string sample = //this string was too long! It was giving style warnings.
+    "@TH1SNUMBER() Hello! This is just a longer bit of text to test the tokenizer. "~
+    "Today is @TimeNow() which is unimportant but i need to keep the text going. Your age is @max(@min(99 55) 18). "~
+    "One last stress @mock(@tess() kokokfoe fkokefoe @monkey(kfeoke @roger(fokokfe @baka() fkoeokfe))) damn";
 
  
     cookieCutterUnittest(title, sample);

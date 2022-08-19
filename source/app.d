@@ -19,25 +19,9 @@ void main()
 		""
  );
 
-	// string input = format(
-	// 	"%s\n",
-
-	// 	"Hello, my name is @getUsername ( 0 ).",
-	// );
 	import parser.tokenizer;
 	Token[] tokens = lexer(input);
-	// 	writeln();
-	// 	writeln();
-	// 	writeln();
-
-	// foreach (i, Token key; tokens)
-	// {
-	// 	writeln(i, " Token: ", key);
-	// }
-	// 	writeln();
-	// 	writeln();
-	// 	writeln();
-
+	
 	import parser.evaluator;
 	///The AbstractEvaluator lets us switch out different Evaluator objects when we need to change the logic in some way.
 	AbstractEvaluator evaluator = new BasicEvaluator();

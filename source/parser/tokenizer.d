@@ -367,6 +367,7 @@ class TokenizerStateMachine
 
 }
 
+///Class so storage and manipulation of data is easy.
 private class Data
 {
     ///In use cases where we have to return a primitive char value, but there is no value to return.
@@ -388,32 +389,40 @@ private class Data
         lexerIndex = 0;
     }
 
+    ///returns the current character from text at the stored lexerIndex
     public char focusChar()
     {
         return focusChar(lexerIndex);
     }
 
+    ///returns a character from text so long provided absolute index is within array range 
     public char focusChar(ulong index)
     {
         return lexerIndex < text.length ? text[index] : text[$ - 1];
     }
 
+    ///checks if the next character is a character
     public bool checkPeak(char testsubject)
     {
         return checkPeak(lexerIndex + 1, testsubject);
     }
 
+    ///checks if the character at provided absolute index is 
     public bool checkPeak(ulong index, char testSubject)
     {
 
         return hasPeak(index) && testSubject == peakAhead(index);
     }
 
+    ///checks to make sure provided absolute index is within text array bounds.
     public bool hasPeak(ulong index)
     {
         return text.length > index;
     }
 
+    ///returns character at provided, absolute position
+    ///If outside of bounds, return the NEG_ACK value. (default value is Negitive_Aknowlege or 0x16)
+    //NOTE2SELF Why is this different from FocusChar(Ulong)? 
     public char peakAhead(ulong index)
     {
         if (text.length <= index)
@@ -421,6 +430,14 @@ private class Data
         return text[index];
     }
 
+    ///returns next character from the lexerIndex value 
+    public char peakAhead()
+    {
+        return peakAhead(lexerIndex + 1);
+    }
+
+    ///It will find the entire word/identifier at an absolute position, 
+    ///store it in the buffer, and update lexerIndex with end of the word's reletive position. 
     public ulong scanNextWord(ulong startLocation)
     {
 
@@ -442,11 +459,6 @@ private class Data
 
         return ulong.max;
     }
-
-    public char peakAhead()
-    {
-        return peakAhead(lexerIndex + 1);
-    }
 }
 
 public Token[] lexer(string text)
@@ -460,12 +472,6 @@ public Token[] lexer(string text)
         data.tokens ~= Token(ttype, data.buffer);
         data.buffer = [];
     }
-    //Helper delegates. Just makes things cleaner.
-    auto addText = () => addToken(TokenType.TEXT);
-    auto addVar = () => addToken(TokenType.VAR_);
-    auto addFlag = () => addToken(TokenType.FLAG);
-    auto addFunc = () => addToken(TokenType.FUNC);
-    auto addParm = () => addToken(TokenType.PARAM);
 
     void make(void delegate() addSpecialToken)
     {
@@ -503,8 +509,7 @@ public Token[] lexer(string text)
     }
 
     auto stateMachine = new TokenizerStateMachine(data);
-    // auto textLex = new TextScanState(tokens);
-    // auto codeLex = new CodeScanState(tokens);
+
     //Incase you want to clean up the token buffers, but don't want to create a token.
     void ignToken()
     {
@@ -520,25 +525,9 @@ public Token[] lexer(string text)
         Token[] sample = data.tokens.dup;
 
         stateMachine.scanChar();
-
-        // this is a HACK!
-
-        // if (lexerState == TEXT_STATE)
-        //     textLex.lex(focusChar);
-
-        // else if (lexerState == CODE_SINGLE_STATE)
-        //     codeLex.lex(focusChar);
-
-        // else if (lexerState == TEXT_STATE) switch (focusChar)
-        // {
-        // default:
-        //     assert(0);
-        // }
-        // else
-        //     assert(0);
-
     }
 
+    //The following bit of code adds the last token. 
     const TEXT_STATE = 0;
     const CODE_SINGLE_STATE = 1;
     const CODE_BLOCK_STATE = 2;
@@ -546,7 +535,7 @@ public Token[] lexer(string text)
     switch (data.lexerState)
     {
     case TEXT_STATE:
-        addText();
+        addToken(TokenType.TEXT);
         break;
     case CODE_SINGLE_STATE:
         //addCode();
@@ -561,46 +550,18 @@ public Token[] lexer(string text)
     return data.tokens;
 }
 
-// bool isNumeric(char sample)
-// {
-//     return false;
-// }
-
-// bool isAlphabet(char sample)
-// {
-
-//     return false;
-// }
-
-/++ 
- * 
- +/
-// pure nothrow @nogc @safe bool isAlpha(dchar c)
-// {
-//     import std.ascii : isAlpha;
-
-//     return isAlpha(c);
-// }
-
-// pure nothrow @nogc @safe bool isDigit(dchar c)
-// {
-//     import std.ascii : isDigit;
-
-//     return isDigit(c);
-// }
-
-// pure nothrow @nogc @safe bool isAlphaNum(dchar c)
-// {
-//     import std.ascii : isAlphaNum;
-
-//     return isAlphaNum(c);
-// }
 /*************************************************
- *Everything after this point in Unittest related*
+ *Everything after this point is Unittest related*
  *************************************************/
 
-///method to quickly make new unit test. It should only be compile time, but i need to check documentation.  
-static void cookieCutterUnittest(string title, string input, string[] stringSample, TokenType[] tokenSample, int tokenLength = -1)
+///method to quickly make new unit test. It should only be compile time, but i need to consult documentation.  
+static void cookieCutterUnittest(
+    string title,
+    string input,
+    string[] stringSample,
+    TokenType[] tokenSample,
+    int tokenLength = -1
+)
 {
     if (input !is null)
         return;
@@ -615,7 +576,11 @@ static void cookieCutterUnittest(string title, string input, string[] stringSamp
     writefln!"\n{%s}"(title);
     Token[] ta = lexer(input);
 
-    writeln("Compare both sample array's length: ", tokenSample.length, " ", stringSample.length, " Expected length is : ", tokenLength);
+    writeln(
+        "Compare both sample array's length: ",
+        tokenSample.length, " ", stringSample.length,
+        " Expected length is : ", tokenLength
+    );
     assert(tokenSample.length == stringSample.length && isRightLength(stringSample.length));
 
     foreach (i, Token key; ta)
@@ -773,7 +738,10 @@ unittest
 {
 
     string title = "Stress";
-    string sample = "@TH1SNUMBER() Hello! This is just a longer bit of text to test the tokenizer. Today is @TimeNow() which is unimportant but i need to keep the text going. Your age is @max(@min(99 55) 18). One last stress @mock(@tess() kokokfoe fkokefoe @monkey(kfeoke @roger(fokokfe @baka() fkoeokfe))) damn";
+    string sample =  //this string was too long! It was giving style warnings.
+        "@TH1SNUMBER() Hello! This is just a longer bit of text to test the tokenizer. " ~
+        "Today is @TimeNow() which is unimportant but i need to keep the text going. Your age is @max(@min(99 55) 18)." ~
+        " One last stress @mock(@tess() kokokfoe fkokefoe @monkey(kfeoke @roger(fokokfe @baka() fkoeokfe))) damn";
 
     TokenType[] tokenCheck;
     string[] stringCheck;
