@@ -104,6 +104,36 @@ class RootNode : Node
 
 }
 
+class VarNode : Node
+{
+    public override int parse(Node parent, Token[] list)
+    {
+        if (list.length < 1 || list[0].tType != TokenType.VAR_)
+
+            return 0; //if first Node isn't text, then abort.
+
+        identifier = list[0];
+        parent.registerNode(this);
+        return 0; // i dislike the fact both success and fail return the same value 
+    }
+
+    public override void registerNode(Node applicant)
+    {
+        assert(0);
+        //return; //Text Nodes will never be able to accept branching Nodes.
+    }
+
+    protected override char[] symbol_debug()
+    {
+        return ['V'];
+    }
+
+    public override string evaluate(AbstractEvaluator AE)
+    {
+        return AE.lookUpVariable(identifier.str);
+    }
+}
+
 class ConditionalNode : Node
 {
 
@@ -170,10 +200,14 @@ class FunctionNode : Node
         {
             final switch (list[super.nodeIndex].tType)
             {
-            case TokenType.TEXT:
             case TokenType.FLAG:
             case TokenType.VAR_:
+                Node n = new VarNode();
+                super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
+                break;
             case TokenType.PARAM:
+            case TokenType.TEXT:
+
                 Node n = new SimpleNode();
                 super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
                 break;
