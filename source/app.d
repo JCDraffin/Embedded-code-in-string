@@ -3,12 +3,15 @@ void main()
 	import std.format;
 	import std.stdio;
 
+	string input3 = format(
+		"%s\n",
+		"##SunShinesOnSunday: #SunShinesOnSunday");
 	string input2 = format(
 		"%s\n",
 		"@sub( 1,  ,2  ,3 , 4 ,5)",);
 	//easily generate a string in the correct format for the parser and writeln.
 	string input = format(
-		"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+		"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
 		"@add( $A, $name , $B , $C , $D , $E)",
 		"Hello, my name is $name. This text is here so you can have example text to run the application with.",
 		"@@ is our escape character like \\ is in C based languages. Functions/Delegates are called like so @@foo().",
@@ -38,6 +41,24 @@ void main()
 		"@@div($$A,$$B,$$C,$$D,$$E,$$F) = @div( $A,$B,$C,$D,$E,$F)",
 		"@@div($$E,$$D,$$C,$$B,$$A,$$F) = @div( $A,$B,$C,$D,$E,$F)",
 
+		"Lets give some Example flag.",
+
+		"##SunShinesOnSunday: #SunShinesOnSunday",
+		"##SunShinesOnMonday: #SunShinesOnMonday",
+		"##SunShinesOnTuesday: #SunShinesOnTuesday",
+		"##SunShinesOnWensday: #SunShinesOnWensday",
+		"##SunShinesOnThrusday: #SunShinesOnThrusday",
+		"##SunShinesOnFriday: #SunShinesOnFriday",
+
+		"##SunShinesOnSaturDay: #SunShinesOnSaturDay",
+ 
+
+		// "Comparison opporators are likely not reasonably accurate for this language.", 
+		// "The math opporations uses double primitive types which is a floating point type. ",
+		// "The flaw in this design is that floats & doubles on a low level, use a base 2 scientific notiation.",
+		// "This results in opporation which should lead to the same value, having slight differences.",
+		// "take this equation. 3*4(1/3) = 8-4 is this correct if you used a float? What's 3*(1/3)?",
+		// "Is it 1 or is it 1.000000000003? it might even be .999999999997!"
 	);
 
 	import parser.tokenizer;
@@ -56,11 +77,22 @@ void main()
 	evaluator.setVariable("E", "5");
 	evaluator.setVariable("F", "1.33");
 
+	evaluator.setFlag("SunShinesOnSunday", true);
+	evaluator.setFlag("SunShinesOnMonday", false);
+	evaluator.setFlag("SunShinesOnTuesday", false);
+	evaluator.setFlag("SunShinesOnWensday", false);
+	evaluator.setFlag("SunShinesOnThrusday", false);
+	evaluator.setFlag("SunShinesOnFriday", false);
+	evaluator.setFlag("SunShinesOnSaturday", false);
+
+
+ 
 	import parser.node;
 
 	RootNode treenode = new RootNode();
 	treenode.parse(tokens); //this initializes the node. 
-
 	string output = treenode.evaluate(evaluator);
+
+	// writeln(tokens);
 	writeln(output);
 }

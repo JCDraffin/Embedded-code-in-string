@@ -8,6 +8,7 @@ public abstract class AbstractEvaluator
     abstract public void setVariable(string varIdentifer, string value);
     abstract public bool lookUpFlag(string flagIdentifer);
     abstract public void setFlag(string flagIdentifer, bool value);
+    abstract public string convFlag2Str(bool );
     abstract public string runCompiledFunction(string funcIdentifer, string[] arguments); //Function to send scripting language calls, into compiled language calls.
     abstract public string runCompiledDlangFunction(string funcIdentifer, string[] arguments); //Should this function even exist! 
 
@@ -85,6 +86,10 @@ public class BasicEvaluator : AbstractEvaluator
         flags[flagIdentifer] = value;
     }
 
+    public override string convFlag2Str(bool result)
+    {
+        return result?"T":"F";
+    }
     public override string runCompiledFunction(string funcIdentifer, string[] arguments)
     {
         return runCompiledDlangFunction(funcIdentifer, arguments);

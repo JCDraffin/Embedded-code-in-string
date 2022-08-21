@@ -44,12 +44,15 @@ class RootNode : Node
         {
             final switch (list[super.nodeIndex].tType)
             {
+            case TokenType.FLAG:
+                Node n = new FlagNode();
+                super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
+                break;
             case TokenType.VAR_:
                 Node n = new VarNode();
                 super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
                 break;
             case TokenType.TEXT:
-            case TokenType.FLAG:
             case TokenType.PARAM:
                 Node n = new SimpleNode();
                 super.nodeIndex = super.nodeIndex + n.parse(this, list[super.nodeIndex .. $]);
@@ -104,6 +107,38 @@ class RootNode : Node
 
 }
 
+class FlagNode : Node
+{
+    public override int parse(Node parent, Token[] list)
+    {
+        ////// URGH!!!! What does this even do at this point?
+        if (list.length < 1 || list[0].tType != TokenType.FLAG) // requires there's at least a element in the list.  
+            return 0; //if first Node isn't text, then abort.
+
+
+        identifier = list[0];
+        parent.registerNode(this);
+        return 0; // i dislike the fact both success and fail return the same value 
+
+    }
+
+    public override void registerNode(Node applicant)
+    {
+        assert(0);
+        //return; //Text Nodes will never be able to accept branching Nodes.
+    }
+
+    protected override char[] symbol_debug()
+    {
+        return ['F'];
+    }
+
+    public override string evaluate(AbstractEvaluator AE)
+    {
+        return AE.convFlag2Str(AE.lookUpFlag(identifier.str));
+    }
+}
+
 class VarNode : Node
 {
     public override int parse(Node parent, Token[] list)
@@ -132,6 +167,7 @@ class VarNode : Node
     {
         return AE.lookUpVariable(identifier.str);
     }
+
 }
 
 class ConditionalNode : Node
