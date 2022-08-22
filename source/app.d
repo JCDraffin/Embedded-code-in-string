@@ -11,7 +11,7 @@ void main()
 		"@sub( 1,  ,2  ,3 , 4 ,5)",);
 	//easily generate a string in the correct format for the parser and writeln.
 	string input = format(
-		"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+		"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
 		"@add( $A, $name , $B , $C , $D , $E)",
 		"Hello, my name is $name. This text is here so you can have example text to run the application with.",
 		"@@ is our escape character like \\ is in C based languages. Functions/Delegates are called like so @@foo().",
@@ -25,7 +25,7 @@ void main()
 		"",
 		"",
 		"Lets give some Example Arithmetic. A = 1, B = 2, C = 3, D = 4, E = 5, F = 1.33",
-		"Just integer values $name",
+		"Just integer values.",
 		"@@add(1,2,3,4,5) = @sub(1,2,3,4,5)",
 
 		"@@add($$A,$$B,$$C,$$D,$$E) = @add( $A, $name , $B , $C , $D , $E)",
@@ -33,14 +33,14 @@ void main()
 		"@@mul($$A,$$B,$$C,$$D,$$E) = @mul( $A,$B,$C,$D,$E)",
 		"@@div($$A,$$B,$$C,$$D,$$E) = @div( $A,$B,$C,$D,$E)",
 		"@@div($$E,$$D,$$C,$$B,$$A) = @div( $A,$B,$C,$D,$E)",
-		"\n",
+		"",
 		"Floating point value mixed in",
 		"@@add($$A,$$B,$$C,$$D,$$E,$$F) = @add( $A,$B,$C,$D,$E,$F)",
 		"@@sub($$A,$$B,$$C,$$D,$$E,$$F) = @sub( $A,$B,$C,$D,$E,$F)",
 		"@@mul($$A,$$B,$$C,$$D,$$E,$$F) = @mul( $A,$B,$C,$D,$E,$F)",
 		"@@div($$A,$$B,$$C,$$D,$$E,$$F) = @div( $A,$B,$C,$D,$E,$F)",
 		"@@div($$E,$$D,$$C,$$B,$$A,$$F) = @div( $A,$B,$C,$D,$E,$F)",
-
+		"",
 		"Lets give some Example flag.",
 
 		"##SunShinesOnSunday: #SunShinesOnSunday",
@@ -49,8 +49,10 @@ void main()
 		"##SunShinesOnWensday: #SunShinesOnWensday",
 		"##SunShinesOnThrusday: #SunShinesOnThrusday",
 		"##SunShinesOnFriday: #SunShinesOnFriday",
-
 		"##SunShinesOnSaturDay: #SunShinesOnSaturDay",
+		"",
+		"Here's a list of all commands and their description",
+		"@help()",
  
 
 		// "Comparison opporators are likely not reasonably accurate for this language.", 
